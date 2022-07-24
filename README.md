@@ -1,57 +1,88 @@
-# Template para projetos Java usando o Visual Studio Code
+# 6.2 // Direcionalidade, Multiplicidade e Acoplamento // Friends
 
-Um _template_ é um projeto base, para não iniciar do zero e ter pelo menos uma estrutura mínima onde se apoiar.
+Use este link do GitHub Classroom para ter sua cópia alterável deste repositório: <>
 
-Antes de começar a desenvolver com este _template_ é necessário ter instalado o Java Software Development Kit (JDK), o editor Visual Studio Code (VSCode) e o utilitário de controle de versão de código _Git_.
+Implementar respeitando os fundamentos de Orientação a Objetos.
 
+**Tópicos desta atividade:** direcionalidade e multiplicidade dos relacionamentos e questões de acoplamento e dependência.
 
+---
 
-## Instalação e Configuração do JDK
-
-É necessário instalar o JDK a partir da versão 8, porém é recomendada versão 11-LTS (Long Term Support - suporte de longo prazo) ou até mesmo a 17-LTS.
-
-Para o Sistema Operacional (SO) Windows, ele pode ser obtido aqui <https://adoptium.net/?variant=openjdk11&jvmVariant=hotspot>. Siga as instruções de instalação e não esqueça de selecionar os opcionais durante o processo, especialmente a parte ⚠️ _"add Java to PATH"_.
-
-Para Sistemas Operacionais Linux/Debian, como Ubuntu, Pop OS, Mint, Elementary, etc, execute no terminal o comando `sudo apt install openjdk-11-jdk`, que a mágica vai acontecer.
-
-Para testar a instalação, seja no Windows ou Linux, abra o _Prompt_ de Comando (cmd) ou o Terminal e execute o compilador Java com `javac -version`. A saída deve ser algo com `javac 11.0.9.1`, ou outra versão.
+Implementar o básico de uma Rede Social: associações bidirecionais! Falando em Orientação a Objetos, associações entre vários objetos formam um Grafo (rede) de Objetos, passível de navegação, ou seja, de um objeto acessar outro, e deste outro acessar outros, e assim por diante. O modelo funcionará com uma classe básica chamada `Pessoa` que terá nome e amigos. Deve ser possível adicionar e remover amigos. A adição de um amigo é bidirecional, ou seja, se `A` adiciona `B` como amigo, então `A` é amigo de `B` e `B` é amigo de `A`, Ver casos de teste:
 
 
+```java
+Pessoa joey     = new Pessoa("Joey");
+Pessoa rachel   = new Pessoa("Rachel");
+Pessoa monica   = new Pessoa("Monica");
+Pessoa chandler = new Pessoa("Chandler");
+Pessoa phoebe   = new Pessoa("Phoebe");
 
-## Instalação e Configuração do Visual Studio Code (VSCode)
+System.out.println(joey.getContagemAmigos() == 0);
+System.out.println(rachel.getContagemAmigos() == 0);
 
-O VSCode pode ser obtido aqui: <https://code.visualstudio.com/download>. A instalação é semelhante nos Sistemas Operacionais Windows e Linux.
+joey.adicionaAmigo(rachel);
 
-No Windows, abra o instalador e não esqueça de selecionar todos os opcionais, como _adicionar code ao path_ e _adicionar "abrir com code" ao menu_, por exemplo.
+// java.util.List
+List<Pessoa> amigosDoJoey = joey.getAmigos();
+System.out.println(amigosDoJoey.size() == 1);
 
-No Linux, abra o arquivo `.deb` baixado no gerenciador de pacotes e instale normalmente conforme instruções de seu sistema operacional.
+System.out.println(joey.getAmigos().size() == 1);
+System.out.println(rachel.getAmigos().size() == 1);
 
-Este _template_ possui uma pasta [.vscode](.vscode) com as extensões necessárias em [extensions.json](.vscode/extensions.json) e as configurações recomendadas em [settings.json](.vscode/settings.json) para um **ambiente de ensino** (configuração didática). Fique a vontade para alterá-los como achar melhor.
+monica.adicionaAmigo(joey);
+System.out.println(joey.getAmigos().size() == 2);
 
-A única extensão obrigatória é a _"vscjava.vscode-java-pack"_.
+// o primeiro amigo é `0`
+System.out.println(rachel.getAmigo(0).equals(joey));
+System.out.println(rachel.getAmigo(1) == null);
 
-A extensão _"EditorConfig"_ é bastante recomendada. Ela funciona junto com o arquivo [.editorconfig](.editorconfig) presente neste _template_ para padronizar a formatação dos códigos-fonte.
+System.out.println(joey.getAmigo(0).equals(rachel));
+System.out.println(joey.getAmigo(1).equals(monica));
 
-Finalmente, se preferes o editor em Português, instale a extensão _Portuguese (Brazil) Language Pack for Visual Studio Code_.
+rachel.adicionaAmigo(monica);
+monica.adicionaAmigo(chandler);
+
+System.out.println(rachel.getAmigo(1).equals(monica));
+
+System.out.println(monica.getAmigo(0).equals(joey));
+System.out.println(monica.getAmigo(1).equals(rachel));
+System.out.println(monica.getAmigo(2).equals(chandler));
+
+phoebe.adicionaAmigo(joey);
+phoebe.adicionaAmigo(rachel);
+phoebe.adicionaAmigo(monica);
+phoebe.adicionaAmigo(chandler);
+
+System.out.println(phoebe.getAmigos().size() == 4);
+
+phoebe.removeAmigo(rachel);
+
+System.out.println(phoebe.getAmigos().size() == 3);
+
+System.out.println(phoebe.getAmigo(0).equals(joey));
+System.out.println(phoebe.getAmigo(1).equals(monica));
+System.out.println(phoebe.getAmigo(2).equals(chandler));
+
+for (int i = 0; i < phoebe.getAmigos().size(); i++) {
+  System.out.println(phoebe.getAmigo(i) != null);
+}
+
+System.out.println(phoebe.getAmigo(0).getAmigo(0).equals(rachel));
+                          // joey     // rachel   // monica   // chandler
+System.out.println(phoebe.getAmigo(0).getAmigo(0).getAmigo(1).getAmigo(2).equals(chandler));
+
+System.out.println(joey.getAmigos().size() == 3);
+
+joey.adicionaAmigo(joey);
+
+System.out.println(joey.getAmigos().size() == 3);
+
+joey.removeAmigo(0);
+joey.removeAmigo(0);
+joey.removeAmigo(0);
+
+System.out.println(joey.getAmigos().size() == 0);
+```
 
 
-
-## Instalação e Configuração do Git
-
-O Git para Windows pode ser obtido neste link: <https://git-scm.com/download/win>. A instalação é simples e intuitiva. Como sempre, não esqueça dos opcionais, principalmente a opção _adicionar o git ao path_!
-
-Para Linux, o comando `sudo apt install git` no terminal faz tudo.
-
-Para verificar a instalação abra o _prompt_ ou um terminal e execute `git --version`. Se não acusou _"comando não encontrado"_ é porque está tudo funcionando perfeitamente.
-
-
-
-## Códigos-fonte
-
-Considere adicionar os arquivos de código-fonte `.java` no diretório [src](./src/), como o exemplo [src/App.java](./src/App.java).
-
-
-
-## Licenciamento
-
-Este _template_ é _open source_ licenciado sob a GPL, assim como todos os projetos derivados dele. Mais detalhes em [LICENÇA.md](LICENÇA.md).
