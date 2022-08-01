@@ -1,6 +1,6 @@
 # 6.2 // Direcionalidade, Multiplicidade e Acoplamento // Friends
 
-Use este link do GitHub Classroom para ter sua cópia alterável deste repositório: <>
+Use este link do GitHub Classroom para ter sua cópia alterável deste repositório: <https://classroom.github.com/a/OEfvD9Ur>
 
 Implementar respeitando os fundamentos de Orientação a Objetos.
 
